@@ -1325,6 +1325,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1987895147}
   - component: {fileID: 1987895146}
+  - component: {fileID: 1987895148}
   m_Layer: 0
   m_Name: Sun
   m_TagString: Untagged
@@ -1374,7 +1375,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.9607843, g: 0.70480806, b: 0.047058813, a: 1}
+  m_Color: {r: 1, g: 0.92156863, b: 0.007843138, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1399,6 +1400,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1987895148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987895145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d7464afbda544d9af53932115f8aea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sunSprite: {fileID: 1987895146}
+  dayColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  nightColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+  transitionDuration: 2
 --- !u!1 &2031502067
 GameObject:
   m_ObjectHideFlags: 0
