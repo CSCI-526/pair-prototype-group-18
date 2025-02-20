@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
     public float healthDrainRate = 1f;
     private Coroutine healthDrainCoroutine;
     private bool isInHealingZone = false; // Track healing zone status
+    private bool isNight = false; // Tracks whether it's night
 
     public Image currentHealthBar;  // Yellow bar (active health)
     public Image depletedHealthBar; // White bar (depleted area)
@@ -16,13 +17,25 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
-        startHealthDrain();  // Start draining health by default
         updateHealthBars();
+    }
+
+    void Update()
+    {
+        // Start/Stop Health Drain Based on Nighttime
+        if (isNight && !isInHealingZone && healthDrainCoroutine == null)
+        {
+            startHealthDrain();
+        }
+        else if (!isNight && healthDrainCoroutine != null)
+        {
+            stopHealthDrain();
+        }
     }
 
     public void startHealthDrain()
     {
-        if (healthDrainCoroutine == null && !isInHealingZone)
+        if (healthDrainCoroutine == null)
         {
             healthDrainCoroutine = StartCoroutine(drainHealth());
         }
@@ -39,49 +52,50 @@ public class PlayerHealth : MonoBehaviour
 
     IEnumerator drainHealth()
     {
-        while (currentHealth > 0)
+        while (currentHealth > 0 && isNight) // Health drains only at night
         {
-            if (!isInHealingZone) // Drain only if NOT in healing zone
+            if (!isInHealingZone)
             {
-                float previousHealth = currentHealth; // Store the previous health value
+                float previousHealth = currentHealth;
                 currentHealth -= healthDrainRate;
-                currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth); // Prevents negative health
-
-                updateHealthBars(previousHealth); // Update bars properly
+                currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+                updateHealthBars(previousHealth);
             }
             yield return new WaitForSeconds(1f);
         }
-
-        Debug.Log("Player is dead");
     }
 
     void updateHealthBars(float previousHealth = -1)
     {
         float healthPercentage = currentHealth / maxHealth;
-
-        // Update the yellow "Current Health" bar instantly
         currentHealthBar.fillAmount = healthPercentage;
 
         // Only expand the White Bar (Depleted Health) if health has decreased
         if (previousHealth > currentHealth) 
         {
-            depletedHealthBar.fillAmount = 1; // Always full, showing the depleted area
+            depletedHealthBar.fillAmount = 1; // Always full, showing depleted area
         }
+    }
+
+    // Called when Night Starts (From DayNightController)
+    public void setNightTime(bool night)
+    {
+        isNight = night;
+        Debug.Log(night ? "It's Night! Health will start draining." : "☀️ It's Day! Health drain stops.");
     }
 
     // When player enters a healing zone
     public void enterHealingZone()
     {
         isInHealingZone = true;
-        stopHealthDrain(); // Stop losing health
-        Debug.Log("Health Drain Stopped");
+        stopHealthDrain();
+        Debug.Log("Health Drain Stopped in Healing Zone");
     }
 
     // When player leaves a healing zone
     public void exitHealingZone()
     {
         isInHealingZone = false;
-        startHealthDrain(); // Resume health depletion
-        Debug.Log("Health Drain Resumed");
+        Debug.Log("Left Healing Zone");
     }
 }

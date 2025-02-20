@@ -25,15 +25,10 @@ public class DayNightController : MonoBehaviour
         StartCoroutine(ChangeColor(isDay ? dayColor : nightColor));
         StartCoroutine(ChangeBackgroundColor(isDay ? dayBackgroundColor : nightBackgroundColor));
 
-        if (!isDay) // If it's night, start health reduction
-        {
-            playerHealth.startHealthDrain();
-        }
-        else
-        {
-            playerHealth.stopHealthDrain();
-        }
+        // Inform PlayerHealth about Day/Night Change
+        playerHealth.setNightTime(!isDay);
 
+        // Update Hidden Paths Visibility Based on Time
         HiddenPathController[] hiddenPaths = FindObjectsOfType<HiddenPathController>();
         foreach (HiddenPathController path in hiddenPaths)
         {
