@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;  // Required for UI elements
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -10,14 +10,14 @@ public class PlayerHealth : MonoBehaviour
     private Coroutine healthDrainCoroutine;
     private bool isInHealingZone = false; // Track healing zone status
 
-    public Image healthBar;  // Drag & Drop your UI Image here
-    public Color fullHealthColor = Color.green;
-    public Color depletedHealthColor = Color.white;
+    public Image currentHealthBar;  // Yellow bar (active health)
+    public Image depletedHealthBar; // White bar (depleted area)
 
     void Start()
     {
         currentHealth = maxHealth;
         startHealthDrain();  // Start draining health by default
+        updateHealthBars();
     }
 
     public void startHealthDrain()
@@ -43,9 +43,11 @@ public class PlayerHealth : MonoBehaviour
         {
             if (!isInHealingZone) // Drain only if NOT in healing zone
             {
+                float previousHealth = currentHealth; // Store the previous health value
                 currentHealth -= healthDrainRate;
                 currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth); // Prevents negative health
-                updateHealthBar();
+
+                updateHealthBars(previousHealth); // Update bars properly
             }
             yield return new WaitForSeconds(1f);
         }
@@ -53,21 +55,17 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("Player is dead");
     }
 
-    void updateHealthBar()
+    void updateHealthBars(float previousHealth = -1)
     {
-        if (healthBar != null)
-        {
-            healthBar.fillAmount = currentHealth / maxHealth;
+        float healthPercentage = currentHealth / maxHealth;
 
-            // Change color based on health level
-            if (currentHealth <= 0)
-            {
-                healthBar.color = depletedHealthColor;  // White when fully depleted
-            }
-            else
-            {
-                healthBar.color = Color.Lerp(depletedHealthColor, fullHealthColor, currentHealth / maxHealth);
-            }
+        // Update the yellow "Current Health" bar instantly
+        currentHealthBar.fillAmount = healthPercentage;
+
+        // Only expand the White Bar (Depleted Health) if health has decreased
+        if (previousHealth > currentHealth) 
+        {
+            depletedHealthBar.fillAmount = 1; // Always full, showing the depleted area
         }
     }
 
