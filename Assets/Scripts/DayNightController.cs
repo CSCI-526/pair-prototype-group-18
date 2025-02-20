@@ -33,6 +33,12 @@ public class DayNightController : MonoBehaviour
         {
             playerHealth.stopHealthDrain();
         }
+
+        HiddenPathController[] hiddenPaths = FindObjectsOfType<HiddenPathController>();
+        foreach (HiddenPathController path in hiddenPaths)
+        {
+            path.SetNightMode(isDay);
+        }
     }
 
     IEnumerator ChangeColor(Color targetColor)
