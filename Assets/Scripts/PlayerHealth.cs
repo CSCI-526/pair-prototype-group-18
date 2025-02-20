@@ -76,6 +76,7 @@ public class PlayerHealth : MonoBehaviour
     {
         isInHealingZone = true;
         stopHealthDrain(); // Stop losing health
+        Debug.Log("Health Drain Stopped");
     }
 
     // When player leaves a healing zone
@@ -83,5 +84,6 @@ public class PlayerHealth : MonoBehaviour
     {
         isInHealingZone = false;
         startHealthDrain(); // Resume health depletion
+        Debug.Log("Health Drain Resumed");
     }
 }
