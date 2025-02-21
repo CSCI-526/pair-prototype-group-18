@@ -5,7 +5,7 @@ public class DayNightController : MonoBehaviour
 {
     public SpriteRenderer sunSprite;  // Assign your Sun's SpriteRenderer in Inspector
     public Color dayColor = Color.yellow;
-    public Color nightColor = Color.blue; // Dark navy blue for night
+    public Color nightColor = Color.black; // Dark navy blue for night
     public Color dayBackgroundColor = new Color(0.5f, 0.8f, 1.0f); // Light blue sky
     public Color nightBackgroundColor = new Color(0.05f, 0.05f, 0.2f); // Dark night sky
     public float transitionDuration = 2.0f; // Time for smooth transition
@@ -39,6 +39,18 @@ public class DayNightController : MonoBehaviour
         foreach (LadderController platform in climbablePlatforms)
         {
             platform.SetNightMode(isDay);
+        }
+
+        VisibleController[] visibleObstacles = FindObjectsOfType<VisibleController>();
+        foreach (VisibleController obs in visibleObstacles)
+        {
+            obs.SetNightMode(isDay);
+        }
+
+        InvisibleController[] invisibleObstacles = FindObjectsOfType<InvisibleController>();
+        foreach (InvisibleController obs in invisibleObstacles)
+        {
+            obs.SetNightMode(isDay);
         }
     }
 
