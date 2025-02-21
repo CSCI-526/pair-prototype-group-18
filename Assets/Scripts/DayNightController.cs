@@ -34,6 +34,12 @@ public class DayNightController : MonoBehaviour
         {
             path.SetNightMode(isDay);
         }
+
+        LadderController[] climbablePlatforms = FindObjectsOfType<LadderController>();
+        foreach (LadderController platform in climbablePlatforms)
+        {
+            platform.SetNightMode(isDay);
+        }
     }
 
     IEnumerator ChangeColor(Color targetColor)

@@ -11,8 +11,8 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayer;
 
 
-    private Rigidbody2D rb; // Reference to the Rigidbody2D component attached to the player
-    private Vector2 movement; // Stores the direction of player movement
+    private Rigidbody2D rb; 
+    private Vector2 movement;
     [SerializeField] private int jumpPower = 5;
     private bool isGrounded;
     [SerializeField] private float groundCheckRadius = 0.2f;
@@ -20,17 +20,14 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Initialize the Rigidbody2D component
         rb = GetComponent<Rigidbody2D>();
 
-        // Prevent the player from rotating
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Get player input from keyboard or controller
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         //float verticalInput = Input.GetAxisRaw("Vertical");
         bool jumpInput = Input.GetButtonDown("Jump");
