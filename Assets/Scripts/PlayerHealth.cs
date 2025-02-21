@@ -13,6 +13,15 @@ public class PlayerHealth : MonoBehaviour
 
     public Image currentHealthBar;  // Yellow bar (active health)
     public Image depletedHealthBar; // White bar (depleted area)
+    public GameOverController gameOverController; // Reference to GameOverController
+
+    void Awake()
+    {
+        if (gameOverController == null)
+        {
+            gameOverController = FindObjectOfType<GameOverController>();
+        }
+    }
 
     void Start()
     {
@@ -31,6 +40,12 @@ public class PlayerHealth : MonoBehaviour
         {
             stopHealthDrain();
         }
+
+        // Check for game over
+        // if (currentHealth <= 0)
+        // {
+        //     gameOverController.GameOver();
+        // }
     }
 
     public void startHealthDrain()
@@ -61,8 +76,16 @@ public class PlayerHealth : MonoBehaviour
                 currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
                 updateHealthBars(previousHealth);
             }
+            if (currentHealth <= 0)
+            {
+                gameOverController.GameOver();
+                Application.Quit();
+                yield break;
+            }
             yield return new WaitForSeconds(1f);
         }
+
+        
     }
 
     void updateHealthBars(float previousHealth = -1)
